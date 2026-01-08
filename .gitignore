@@ -1,0 +1,48 @@
+# 忽略所有非源代码目录
+data/
+models/
+config/
+logs/
+AfterTraining/ 
+BGE_model/
+eval/
+evaluation/
+output/
+QA_Evaluation/
+Qwen3-1.7B/
+Qwen3-8B/
+TrainingLogs/
+.autodl/ 
+.Trash-0/
+
+
+
+
+*.log
+*.tmp
+*.bak
+*.swp
+*.DS_Store
+__pycache__/
+*.pyc
+*.ipynb_checkpoints
+
+
+# 忽略特定文件类型
+*.tsv
+*.whl
+*.png
+*.contriever
+*.csv
+*.xlsx
+*.xls
+*.db
+*.h5
+*.pkl
+*.pt
+*.model
+
+# 只跟踪src目录
+# /src/
+# /
+# ! /src/ 
