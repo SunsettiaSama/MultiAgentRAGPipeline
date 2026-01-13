@@ -1,7 +1,7 @@
 # 忽略所有非源代码目录
 data/
 models/
-config/
+./config/
 logs/
 AfterTraining/ 
 BGE_model/
@@ -14,7 +14,12 @@ Qwen3-8B/
 TrainingLogs/
 .autodl/ 
 .Trash-0/
-
+Config/
+base_models/
+contriever/
+llamafactory/
+之前的内容/
+文字工作/
 
 
 
