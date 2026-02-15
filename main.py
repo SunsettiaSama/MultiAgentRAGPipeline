@@ -1,12 +1,13 @@
-from lib.RAG_modules import *
-from lib.dataset_evaluation import *
+from src.RAG_modules import *
+from src.dataset_evaluation import *
 import os
-from lib.train import *
-from lib.dataset import build_garbage_dataset, generate_garbage
+from src.train import *
+from src.dataset import build_garbage_dataset, generate_garbage
 import traceback
 import datetime
 from omegaconf import OmegaConf
-from lib.llamafactory.train.tuner import run_exp
+from src.llamafactory.train.tuner import run_exp
+from src.config import MyTrainConfig
 
 def save_format_golden_model():
     config = MyTrainConfig()
@@ -63,8 +64,8 @@ def my_ppo_train(llama_factory_config_path = None, AERR_config_path = None):
         AERR_config.load_yaml(AERR_config_path, merge = True)
 
     config_dict = OmegaConf.to_container(llama_config, resolve=True)
-    from lib.llamafactory.hparams import get_train_args
-    from lib.llamafactory.train.ppo import run_ppo
+    from src.llamafactory.hparams import get_train_args
+    from src.llamafactory.train.ppo import run_ppo
     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(config_dict)
 
     run_ppo(model_args, data_args, training_args, finetuning_args, generating_args, our_config = AERR_config)
@@ -75,8 +76,8 @@ def sft(yaml_path = "/root/autodl-tmp/config/SFTTrainingConfig.yaml"):
     config = OmegaConf.load(yaml_path)
 
     config_dict = OmegaConf.to_container(config, resolve=True)
-    from lib.llamafactory.hparams import get_train_args
-    from lib.llamafactory.train.sft import run_sft
+    from src.llamafactory.hparams import get_train_args
+    from src.llamafactory.train.sft import run_sft
     model_args, data_args, training_args, finetuning_args, generating_args = get_train_args(config_dict)
     run_sft(model_args, data_args, training_args, finetuning_args, generating_args)
     
@@ -86,7 +87,7 @@ if __name__ == '__main__':
     
     # warm_start()
     
-    # from lib.dataset import csv2format_dataset
+    # from src.dataset import csv2format_dataset
     # csv2format_dataset(input_path = "/root/autodl-tmp/QA_Evaluation/AERR/interaction_history-ckpt1000.csv", 
     #                    output_dir = "/root/autodl-tmp/data/format_data/", 
     #                    ignore_index = True, 
