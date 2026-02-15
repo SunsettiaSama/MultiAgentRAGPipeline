@@ -55,4 +55,4 @@ __pycache__/
 corpus/*.zip
 corpus/*.7z
 *.zip
-
+test/ 
