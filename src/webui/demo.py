@@ -263,37 +263,23 @@ class LLMWebUI:
             
             self.demo = demo
     
-    def _clear_chat(self) -> List[Dict[str, str]]:
+    def _clear_chat(self) -> List[List[str]]:
         """清空对话历史"""
         return []
     
-    def _export_chat(self, history: List[Dict[str, str]]) -> str:
+    def _export_chat(self, history: List[List[str]]) -> str:
         """导出对话历史为文本"""
         if not history:
             return "对话历史为空，无法导出。"
         
         export_text = "# 对话历史导出\n\n"
-        conversation_num = 1
         
-        # 遍历历史记录，按用户-助手配对导出
-        i = 0
-        while i < len(history):
-            msg = history[i]
-            if msg.get("role") == "user":
-                user_msg = msg.get("content", "")
-                # 查找对应的助手回复
-                if i + 1 < len(history) and history[i + 1].get("role") == "assistant":
-                    assistant_msg = history[i + 1].get("content", "")
-                    export_text += f"## 对话 {conversation_num}\n\n"
-                    export_text += f"**用户**: {user_msg}\n\n"
-                    export_text += f"**助手**: {assistant_msg}\n\n"
-                    export_text += "---\n\n"
-                    conversation_num += 1
-                    i += 2
-                else:
-                    i += 1
-            else:
-                i += 1
+        # 遍历历史记录，每条记录包含[用户消息, 助手回复]
+        for i, (user_msg, assistant_msg) in enumerate(history, 1):
+            export_text += f"## 对话 {i}\n\n"
+            export_text += f"**用户**: {user_msg}\n\n"
+            export_text += f"**助手**: {assistant_msg}\n\n"
+            export_text += "---\n\n"
         
         return export_text
     

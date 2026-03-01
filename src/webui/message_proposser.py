@@ -110,17 +110,17 @@ class MessageProcessor:
                               f"系统提示词：{system_prompt[:50]}..."
         return placeholder_response
     
-    def process(self, message: str, history: List[Dict[str, str]], 
+    def process(self, message: str, history: List[List[str]], 
                 max_tokens: int, temperature: float, system_prompt: str,
                 enable_api: bool = False, api_key: str = "",
                 api_base_url: str = "https://api.openai-proxy.org/v1",
-                api_model: str = "gpt-4o-mini") -> List[Dict[str, str]]:
+                api_model: str = "gpt-4o-mini") -> List[List[str]]:
         """
-        处理用户消息并生成回复（符合Gradio接口格式）
+        处理用户消息并生成回复（符合Gradio Chatbot接口格式）
         
         参数:
             message: 用户输入的消息
-            history: 对话历史，格式为 [{"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}, ...]
+            history: 对话历史，Gradio Chatbot格式为 [[用户消息, 助手回复], ...]
             max_tokens: 最大token数
             temperature: 温度参数
             system_prompt: 系统提示词
@@ -130,7 +130,7 @@ class MessageProcessor:
             api_model: API模型名称
             
         返回:
-            更新后的对话历史，格式为 [{"role": "user", "content": "..."}, {"role": "assistant", "content": "..."}, ...]
+            更新后的对话历史，Gradio Chatbot格式为 [[用户消息, 助手回复], ...]
         """
         if not message.strip():
             return history
@@ -139,17 +139,19 @@ class MessageProcessor:
         if history is None:
             history = []
         
-        # 添加用户消息到历史记录
-        history.append({"role": "user", "content": message})
-        
         # 根据配置选择调用方式
         if enable_api:
             # 构建API调用的messages格式（包含系统提示词和历史记录）
             api_messages = []
             if system_prompt and system_prompt.strip():
                 api_messages.append({"role": "system", "content": system_prompt})
-            # 添加历史记录（排除刚添加的当前用户消息）
-            api_messages.extend(history[:-1])
+            
+            # 转换history格式为OpenAI API格式
+            for user_msg, assistant_msg in history:
+                api_messages.append({"role": "user", "content": user_msg})
+                if assistant_msg:
+                    api_messages.append({"role": "assistant", "content": assistant_msg})
+            
             # 添加当前用户消息
             api_messages.append({"role": "user", "content": message})
             
@@ -166,7 +168,7 @@ class MessageProcessor:
             # 使用占位符回复
             response = self._placeholder_call(message, max_tokens, temperature, system_prompt)
         
-        # 添加助手回复到历史记录
-        history.append({"role": "assistant", "content": response})
+        # 添加用户消息和助手回复对到历史记录
+        history.append([message, response])
         
         return history
