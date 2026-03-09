@@ -5,8 +5,8 @@ from openai import OpenAI
 
 class Large_Language_Model_API:
     def __init__(self, 
-                 api_key: str = 'sk-NHZNQX83inCXYa8a2tL2yMnGST1ls64CFVdhBlira9sM8qBI',
-                 base_url: str = 'https://api.openai-proxy.org/v1',
+                 api_key: str = '',
+                 base_url: str = '',
                  model: str = "gpt-4o-mini",
                  timeout: Optional[float] = None,
                  **kwargs, 

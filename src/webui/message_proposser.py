@@ -7,7 +7,7 @@ except ImportError:
     OpenAI = None
 
 # API配置文件路径（相对于项目根目录）
-API_YAML_PATH = r"D:\ProjectsOnPython\MultiAgentRAGPipeline\config\api_config.yaml"
+API_YAML_PATH = r""
 
 
 class MessageProcessor:
