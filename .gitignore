@@ -23,7 +23,6 @@ llamafactory/
 .vscode/
 rag/
 results/
-docs/ 
 agent_docs/
 corpus/ 
 
